@@ -43,6 +43,23 @@ This is **app 1 of 2**. Deploy it first — the frontend needs its URL.
 
 No build step, so Dockhold runs it directly — no Dockerfile needed.
 
+## Security
+
+- **SQL injection:** not possible — queries are parameterized (`$1`), so input is
+  always treated as data, never SQL.
+- **Open write endpoint:** there's no auth, so anyone with the URL can post. The
+  endpoint is rate-limited per IP and caps body size, but it's public by design
+  (CORS only restrains browsers, not scripts).
+- **Stored content is untrusted:** the React frontend escapes it when rendering —
+  never render a message as raw HTML.
+
+To require a token on every request, make this a **private app** (Access tab →
+Private → mint a token; requests then need `Authorization: Bearer <token>`).
+**Don't put that token in the React app** — a browser ships its code to everyone,
+so the token would be readable. To truly limit the API to your app, hold the
+token on a server in front of it (a backend-for-frontend). See
+[the full-stack recipe](https://dockhold.eu/docs/recipes/deploy-a-full-stack-app#lock-the-api-down-to-your-app).
+
 ## Run it locally
 
 ```bash
