@@ -12,6 +12,14 @@ app.use(express.json());
 const allowedOrigin = process.env.ALLOWED_ORIGIN || "*";
 app.use(cors({ origin: allowedOrigin }));
 
+app.get("/", (_req, res) => {
+  res.json({
+    message: "Full-stack example API. The React frontend calls /api/messages.",
+    routes: ["GET /health", "GET /api/messages", "POST /api/messages"],
+    docs: "https://dockhold.eu/docs/recipes/deploy-a-full-stack-app",
+  });
+});
+
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 // List guestbook entries, newest first.
