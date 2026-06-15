@@ -1,0 +1,14 @@
+{
+  "name": "fullstack-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Express + Postgres API half of the Dockhold full-stack (Pro) example.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "pg": "^8.13.0"
+  }
+}
