@@ -1,9 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 const { pool, initDb } = require("./db");
 
 const app = express();
-app.use(express.json());
+
+// Behind Dockhold's edge, the client IP arrives in X-Forwarded-For. Trust one
+// proxy hop so req.ip is the real caller (needed for per-IP rate limiting). If
+// you add more proxies in front, raise this to match the hop count.
+app.set("trust proxy", 1);
+
+// Cap request bodies — a guestbook message is tiny, so reject anything large.
+app.use(express.json({ limit: "10kb" }));
 
 // CORS: allow the deployed frontend's origin. Set ALLOWED_ORIGIN to your web
 // app's URL (e.g. https://fullstack-web-xxxx.dockhold.app). If it's unset we
@@ -35,9 +43,20 @@ app.get("/api/messages", async (_req, res) => {
   }
 });
 
+// Rate-limit writes per IP so the open endpoint can't be flooded. Tune to taste.
+const writeLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "too many requests, slow down" },
+});
+
 // Add a guestbook entry. Parameterized query — never interpolate user input.
-app.post("/api/messages", async (req, res) => {
-  const body = ((req.body && req.body.body) || "").toString().trim();
+app.post("/api/messages", writeLimiter, async (req, res) => {
+  const raw = req.body && req.body.body;
+  if (typeof raw !== "string") return res.status(400).json({ error: "body must be a string" });
+  const body = raw.trim();
   if (!body) return res.status(400).json({ error: "body is required" });
   if (body.length > 280) return res.status(400).json({ error: "body too long (max 280)" });
   try {
