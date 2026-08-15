@@ -41,7 +41,8 @@ This is **app 1 of 2**. Deploy it first — the frontend needs its URL.
 - All queries are parameterized.
 - It listens on `0.0.0.0:$PORT` and allows the `ALLOWED_ORIGIN` for CORS.
 
-No build step, so Dockhold runs it directly — no Dockerfile needed.
+Dockhold builds the included [`Dockerfile`](Dockerfile). There's nothing to
+change in it, and it deploys on any plan.
 
 ## Security
 
