@@ -6,7 +6,7 @@ Running the frontend and API as **two separate apps** (each its own URL, the API
 with its own managed database) is the real shape of a production app — and it's a
 **Pro** plan feature, since it needs more than one app.
 
-[![Deploy to Dockhold](https://img.shields.io/badge/Deploy%20to-Dockhold-2563eb?style=for-the-badge)](https://app.dockhold.eu/new?repo=https://github.com/dockhold/fullstack-api)
+[![Deploy on Dockhold](https://dockhold.eu/button.svg)](https://app.dockhold.eu/new?repo=https://github.com/dockhold/fullstack-api&name=fullstack-api&ref=button)
 
 ## What it does
 
@@ -32,6 +32,15 @@ This is **app 1 of 2**. Deploy it first — the frontend needs its URL.
 4. After the [frontend](https://github.com/dockhold/fullstack-web) is deployed,
    set `ALLOWED_ORIGIN` to the frontend's URL (Variables tab) and redeploy so
    the browser is allowed to call this API.
+
+## Deploy with your AI tool
+
+Install the Dockhold plugin or MCP server in your AI coding tool
+([setup guide](https://dockhold.eu/docs/recipes/deploy-from-your-ai-tool)), then
+say "put this online" in a folder with this template. The tool signs you in
+through the browser once and reports the URL when the app is live.
+
+Or from a terminal: `npx dockhold login`, then `npx dockhold deploy --db` (the `--db` adds the managed database this template needs).
 
 ## How it works
 
